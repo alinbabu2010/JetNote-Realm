@@ -12,13 +12,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.compose.jetnote.R
 import com.compose.jetnote.ui.components.NoteButton
 import com.compose.jetnote.ui.components.NoteInputText
+import com.compose.jetnote.ui.theme.Grey200
+import com.compose.jetnote.utils.Dimens
 import com.compose.jetnote.utils.validateInput
 
 @ExperimentalComposeUiApi
@@ -33,7 +33,7 @@ fun NotesScreen() {
         mutableStateOf("")
     }
 
-    Column(modifier = Modifier.padding(6.dp)) {
+    Column(modifier = Modifier.padding(Dimens.PADDING_6.value)) {
         TopAppBar(title = {
             Text(text = stringResource(R.string.app_name))
         }, actions = {
@@ -42,7 +42,7 @@ fun NotesScreen() {
                 contentDescription = stringResource(R.string.icon_description)
             )
         },
-            backgroundColor = Color(0xFFDADFE3)
+            backgroundColor = Grey200
         )
 
         // Content
@@ -53,8 +53,8 @@ fun NotesScreen() {
         ) {
             NoteInputText(
                 modifier = Modifier.padding(
-                    top = 9.dp,
-                    bottom = 8.dp
+                    top = Dimens.PADDING_9.value,
+                    bottom = Dimens.PADDING_8.value
                 ),
                 text = title,
                 label = stringResource(R.string.title),
@@ -64,8 +64,8 @@ fun NotesScreen() {
             )
             NoteInputText(
                 modifier = Modifier.padding(
-                    top = 9.dp,
-                    bottom = 8.dp
+                    top = Dimens.PADDING_9.value,
+                    bottom = Dimens.PADDING_8.value
                 ),
                 text = description,
                 label = stringResource(R.string.description),
@@ -80,7 +80,7 @@ fun NotesScreen() {
 
 
 @ExperimentalComposeUiApi
-@Preview()
+@Preview
 @Composable
 fun NotesScreenPreview() {
     NotesScreen()
