@@ -8,7 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Notifications
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -17,11 +17,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.compose.jetnote.R
+import com.compose.jetnote.ui.components.NoteButton
 import com.compose.jetnote.ui.components.NoteInputText
+import com.compose.jetnote.utils.validateInput
 
 @ExperimentalComposeUiApi
 @Composable
 fun NotesScreen() {
+
+    var title by remember {
+        mutableStateOf("")
+    }
+
+    var description by remember {
+        mutableStateOf("")
+    }
+
     Column(modifier = Modifier.padding(6.dp)) {
         TopAppBar(title = {
             Text(text = stringResource(R.string.app_name))
@@ -40,8 +51,29 @@ fun NotesScreen() {
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            NoteInputText(text = "Hello", label = "Hello", onTextChange = {})
-
+            NoteInputText(
+                modifier = Modifier.padding(
+                    top = 9.dp,
+                    bottom = 8.dp
+                ),
+                text = title,
+                label = stringResource(R.string.title),
+                onTextChange = {
+                    if (validateInput(it)) title = it
+                }
+            )
+            NoteInputText(
+                modifier = Modifier.padding(
+                    top = 9.dp,
+                    bottom = 8.dp
+                ),
+                text = description,
+                label = stringResource(R.string.description),
+                onTextChange = {
+                    if (validateInput(it)) description = it
+                }
+            )
+            NoteButton(text = stringResource(R.string.save), onClick = { })
         }
     }
 }
