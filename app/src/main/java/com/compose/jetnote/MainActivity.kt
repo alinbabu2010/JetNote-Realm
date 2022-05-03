@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.compose.jetnote.data.model.NoteDataSource
 import com.compose.jetnote.ui.screen.NotesScreen
 import com.compose.jetnote.ui.theme.JetNoteTheme
 
@@ -34,6 +35,6 @@ private fun RootContent() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        NotesScreen()
+        NotesScreen(NoteDataSource().loadNotes(), {}, {})
     }
 }

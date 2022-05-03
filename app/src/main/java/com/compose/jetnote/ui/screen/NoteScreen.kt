@@ -3,6 +3,9 @@ package com.compose.jetnote.ui.screen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -15,15 +18,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.compose.jetnote.R
+import com.compose.jetnote.data.model.Note
 import com.compose.jetnote.ui.components.NoteButton
 import com.compose.jetnote.ui.components.NoteInputText
+import com.compose.jetnote.ui.components.NoteRow
 import com.compose.jetnote.ui.theme.Grey200
 import com.compose.jetnote.utils.Dimens
 import com.compose.jetnote.utils.validateInput
 
 @ExperimentalComposeUiApi
 @Composable
-fun NotesScreen() {
+fun NotesScreen(
+    notes: List<Note>,
+    onAddNote: (Note) -> Unit,
+    onRemove: (Note) -> Unit
+) {
 
     var title by remember {
         mutableStateOf("")
@@ -73,8 +82,20 @@ fun NotesScreen() {
                     if (validateInput(it)) description = it
                 }
             )
-            NoteButton(text = stringResource(R.string.save), onClick = { })
+            NoteButton(text = stringResource(R.string.save), onClick = {
+                if (title.isNotEmpty() && description.isNotEmpty()) {
+                    title = ""
+                    description = ""
+                }
+            })
         }
+        Divider(Modifier.padding(Dimens.PADDING_10.value))
+        LazyColumn {
+            items(notes) { note ->
+                NoteRow(note = note, onNoteClicked = {})
+            }
+        }
+
     }
 }
 
@@ -83,5 +104,5 @@ fun NotesScreen() {
 @Preview
 @Composable
 fun NotesScreenPreview() {
-    NotesScreen()
+    NotesScreen(emptyList(), {}, {})
 }
