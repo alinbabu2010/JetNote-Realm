@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.compose.jetnote.data.model.NoteDataSource
+import com.compose.jetnote.data.model.Note
 import com.compose.jetnote.ui.screen.NotesScreen
 import com.compose.jetnote.ui.theme.JetNoteTheme
 
@@ -35,6 +37,17 @@ private fun RootContent() {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        NotesScreen(NoteDataSource().loadNotes(), {}, {})
+        val notes = remember {
+            mutableStateListOf<Note>()
+        }
+        NotesScreen(
+            notes = notes,
+            onAddNote = {
+                notes.add(it)
+            },
+            onRemoveNote = {
+                notes.remove(it)
+            }
+        )
     }
 }

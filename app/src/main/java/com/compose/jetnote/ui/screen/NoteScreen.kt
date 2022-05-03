@@ -1,5 +1,6 @@
 package com.compose.jetnote.ui.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,10 +16,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.compose.jetnote.R
 import com.compose.jetnote.data.model.Note
+import com.compose.jetnote.data.model.NoteDataSource
 import com.compose.jetnote.ui.components.NoteButton
 import com.compose.jetnote.ui.components.NoteInputText
 import com.compose.jetnote.ui.components.NoteRow
@@ -31,7 +34,7 @@ import com.compose.jetnote.utils.validateInput
 fun NotesScreen(
     notes: List<Note>,
     onAddNote: (Note) -> Unit,
-    onRemove: (Note) -> Unit
+    onRemoveNote: (Note) -> Unit
 ) {
 
     var title by remember {
@@ -41,6 +44,8 @@ fun NotesScreen(
     var description by remember {
         mutableStateOf("")
     }
+
+    val context = LocalContext.current
 
     Column(modifier = Modifier.padding(Dimens.PADDING_6.value)) {
         TopAppBar(title = {
@@ -84,15 +89,19 @@ fun NotesScreen(
             )
             NoteButton(text = stringResource(R.string.save), onClick = {
                 if (title.isNotEmpty() && description.isNotEmpty()) {
+                    onAddNote(Note(title = title, description = description))
                     title = ""
                     description = ""
+                    Toast.makeText(context, "Note Added", Toast.LENGTH_SHORT).show()
                 }
             })
         }
         Divider(Modifier.padding(Dimens.PADDING_10.value))
         LazyColumn {
             items(notes) { note ->
-                NoteRow(note = note, onNoteClicked = {})
+                NoteRow(note = note, onNoteClicked = {
+                    onRemoveNote(it)
+                })
             }
         }
 
@@ -104,5 +113,5 @@ fun NotesScreen(
 @Preview
 @Composable
 fun NotesScreenPreview() {
-    NotesScreen(emptyList(), {}, {})
+    NotesScreen(NoteDataSource().loadNotes(), {}, {})
 }
