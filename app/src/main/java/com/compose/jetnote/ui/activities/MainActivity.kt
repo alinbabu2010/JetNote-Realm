@@ -1,4 +1,4 @@
-package com.compose.jetnote.ui.activites
+package com.compose.jetnote.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
