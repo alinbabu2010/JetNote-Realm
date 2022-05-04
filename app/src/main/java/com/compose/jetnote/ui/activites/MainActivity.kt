@@ -1,20 +1,20 @@
-package com.compose.jetnote
+package com.compose.jetnote.ui.activites
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.compose.jetnote.data.model.Note
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.compose.jetnote.ui.screen.NotesScreen
 import com.compose.jetnote.ui.theme.JetNoteTheme
+import com.compose.jetnote.ui.viewmodels.NoteViewModel
 
 @ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
@@ -22,7 +22,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             JetNoteTheme {
-                RootContent()
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
+                    val noteViewModel: NoteViewModel by viewModels()
+                    NotesApp(noteViewModel)
+                }
             }
         }
     }
@@ -31,23 +38,10 @@ class MainActivity : ComponentActivity() {
 @ExperimentalComposeUiApi
 @Preview(showBackground = true)
 @Composable
-private fun RootContent() {
-    // A surface container using the 'background' color from the theme
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
-    ) {
-        val notes = remember {
-            mutableStateListOf<Note>()
-        }
-        NotesScreen(
-            notes = notes,
-            onAddNote = {
-                notes.add(it)
-            },
-            onRemoveNote = {
-                notes.remove(it)
-            }
-        )
-    }
+fun NotesApp(noteViewModel: NoteViewModel = viewModel()) {
+    NotesScreen(
+        notes = noteViewModel.getAllNotes(),
+        onAddNote = { noteViewModel.addNote(it) },
+        onRemoveNote = { noteViewModel.removeNote(it) }
+    )
 }
