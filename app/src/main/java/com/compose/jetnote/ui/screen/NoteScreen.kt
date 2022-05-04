@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.compose.jetnote.R
 import com.compose.jetnote.data.model.Note
-import com.compose.jetnote.data.model.NoteDataSource
+import com.compose.jetnote.data.source.NoteDataSource
 import com.compose.jetnote.ui.components.NoteButton
 import com.compose.jetnote.ui.components.NoteInputText
 import com.compose.jetnote.ui.components.NoteRow

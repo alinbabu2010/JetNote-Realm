@@ -1,4 +1,6 @@
-package com.compose.jetnote.data.model
+package com.compose.jetnote.data.source
+
+import com.compose.jetnote.data.model.Note
 
 class NoteDataSource {
 
