@@ -1,7 +1,7 @@
 package com.compose.jetnote.data.repositories
 
+import com.compose.jetnote.data.db.NoteDao
 import com.compose.jetnote.data.model.Note
-import com.compose.jetnote.data.source.NoteDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn

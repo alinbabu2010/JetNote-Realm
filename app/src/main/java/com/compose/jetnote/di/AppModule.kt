@@ -2,8 +2,8 @@ package com.compose.jetnote.di
 
 import android.content.Context
 import androidx.room.Room
-import com.compose.jetnote.data.source.NoteDao
-import com.compose.jetnote.data.source.NoteDatabase
+import com.compose.jetnote.data.db.NoteDao
+import com.compose.jetnote.data.db.NoteDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

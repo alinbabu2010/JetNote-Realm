@@ -1,4 +1,4 @@
-package com.compose.jetnote.data.source
+package com.compose.jetnote.data.db
 
 import androidx.room.*
 import com.compose.jetnote.data.model.Note
