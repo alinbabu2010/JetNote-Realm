@@ -1,32 +1,30 @@
 package com.compose.jetnote.di
 
-import android.content.Context
-import androidx.room.Room
-import com.compose.jetnote.data.db.NoteDao
-import com.compose.jetnote.data.db.NoteDatabase
+import com.compose.jetnote.data.db.entity.NoteEntity
+import com.compose.jetnote.data.model.Note
+import com.compose.jetnote.utils.DataToEntityMapper
+import com.compose.jetnote.utils.EntityToDataMapper
+import com.compose.jetnote.utils.Mapper
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object AppModule {
+interface AppModule {
 
     @Singleton
-    @Provides
-    fun provideNoteDao(noteDatabase: NoteDatabase): NoteDao = noteDatabase.noteDao()
+    @Binds
+    fun bindDataToEntityMapper(
+        dataToEntityMapper: DataToEntityMapper
+    ): Mapper<Note, NoteEntity>
 
     @Singleton
-    @Provides
-    fun provideNoteDatabase(@ApplicationContext context: Context): NoteDatabase {
-        return Room.databaseBuilder(
-            context,
-            NoteDatabase::class.java,
-            "notes_db"
-        ).fallbackToDestructiveMigration().build()
-    }
+    @Binds
+    fun bindEntityToDataMapper(
+        entityToDataMapper: EntityToDataMapper
+    ): Mapper<NoteEntity, Note>
 
 }
