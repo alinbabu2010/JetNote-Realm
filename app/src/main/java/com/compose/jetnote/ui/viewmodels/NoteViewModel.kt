@@ -19,11 +19,7 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
     val noteList = _noteList.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            noteRepository.getAllNotes().distinctUntilChanged().collect { noteList ->
-                _noteList.value = noteList.toMutableList()
-            }
-        }
+        getNotes()
     }
 
     /**
@@ -32,7 +28,7 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
      */
     fun addNote(note: Note) = viewModelScope.launch {
         noteRepository.addNote(note)
-    }
+    }.invokeOnCompletion { getNotes() }
 
 
     /**
@@ -41,6 +37,17 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
      */
     fun removeNote(note: Note) = viewModelScope.launch {
         noteRepository.deleteNote(note)
+    }.invokeOnCompletion { getNotes() }
+
+    /**
+     * Method to get all notes
+     */
+    private fun getNotes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            noteRepository.getAllNotes().distinctUntilChanged().collect { noteList ->
+                _noteList.value = noteList.toMutableList()
+            }
+        }
     }
 
 }
