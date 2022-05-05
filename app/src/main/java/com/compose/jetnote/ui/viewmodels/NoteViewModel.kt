@@ -1,38 +1,62 @@
 package com.compose.jetnote.ui.viewmodels
 
-import androidx.compose.runtime.mutableStateListOf
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.compose.jetnote.data.model.Note
-import com.compose.jetnote.data.source.NoteDataSource
+import com.compose.jetnote.data.repositories.NoteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NoteViewModel : ViewModel() {
+@HiltViewModel
+class NoteViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
 
-    private var noteList = mutableStateListOf<Note>()
+    //private var noteList = mutableStateListOf<Note>()
+    private val _noteList = MutableStateFlow<List<Note>>(emptyList())
+    val noteList = _noteList.asStateFlow()
 
     init {
-        noteList.addAll(NoteDataSource().loadNotes())
+        // noteList.addAll(NoteDataSource().loadNotes())
+        viewModelScope.launch(Dispatchers.IO) {
+            noteRepository.getAllNotes().distinctUntilChanged().collect { noteList ->
+                if (noteList.isNullOrEmpty()) {
+                    Log.d("TAG", "Empty List")
+                } else {
+                    _noteList.value = noteList
+                }
+
+            }
+        }
     }
 
     /**
      * Method to add notes
      * @param note [Note] object to be added
      */
-    fun addNote(note: Note) {
-        noteList.add(note)
+    fun addNote(note: Note) = viewModelScope.launch {
+        noteRepository.addNote(note)
     }
+
 
     /**
      * Method to remove notes
      * @param note [Note] object to be removed
      */
-    fun removeNote(note: Note) {
-        noteList.remove(note)
+    fun removeNote(note: Note) = viewModelScope.launch {
+        noteRepository.deleteNote(note)
     }
 
     /**
-     * Method to get all notes
-     * @return List of [Note]
+     * Method to update notes
+     * @param note [Note] object to be removed
      */
-    fun getAllNotes(): List<Note> = noteList
+    fun updateNote(note: Note) = viewModelScope.launch {
+        noteRepository.updateNote(note)
+    }
 
 }
