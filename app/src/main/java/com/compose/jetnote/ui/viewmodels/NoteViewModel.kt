@@ -1,6 +1,5 @@
 package com.compose.jetnote.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.jetnote.data.model.Note
@@ -24,12 +23,7 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
         // noteList.addAll(NoteDataSource().loadNotes())
         viewModelScope.launch(Dispatchers.IO) {
             noteRepository.getAllNotes().distinctUntilChanged().collect { noteList ->
-                if (noteList.isNullOrEmpty()) {
-                    Log.d("TAG", "Empty List")
-                } else {
-                    _noteList.value = noteList
-                }
-
+                _noteList.value = noteList.toMutableList()
             }
         }
     }
