@@ -5,6 +5,8 @@ buildscript {
 
     dependencies {
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.38.1'
+        classpath "com.android.tools.build:gradle:3.5.4"
+        classpath "io.realm:realm-gradle-plugin:10.10.0"
     }
 }
 
