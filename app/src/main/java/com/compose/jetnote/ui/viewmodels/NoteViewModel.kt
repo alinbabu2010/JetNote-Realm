@@ -15,12 +15,10 @@ import javax.inject.Inject
 @HiltViewModel
 class NoteViewModel @Inject constructor(private val noteRepository: NoteRepository) : ViewModel() {
 
-    //private var noteList = mutableStateListOf<Note>()
     private val _noteList = MutableStateFlow<List<Note>>(emptyList())
     val noteList = _noteList.asStateFlow()
 
     init {
-        // noteList.addAll(NoteDataSource().loadNotes())
         viewModelScope.launch(Dispatchers.IO) {
             noteRepository.getAllNotes().distinctUntilChanged().collect { noteList ->
                 _noteList.value = noteList.toMutableList()
@@ -43,14 +41,6 @@ class NoteViewModel @Inject constructor(private val noteRepository: NoteReposito
      */
     fun removeNote(note: Note) = viewModelScope.launch {
         noteRepository.deleteNote(note)
-    }
-
-    /**
-     * Method to update notes
-     * @param note [Note] object to be removed
-     */
-    fun updateNote(note: Note) = viewModelScope.launch {
-        noteRepository.updateNote(note)
     }
 
 }
